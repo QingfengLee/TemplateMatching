@@ -58,9 +58,9 @@ int main(int argc, char* argv[])
 
 	}
 
-	MAT(&filter,0,0) = 0.0;
+	MAT(&filter,0,0) = 1.0;
 	MAT(&filter,0,1) = -1.0;
-	MAT(&filter,0,2) = 0.0;
+	MAT(&filter,0,2) = 3.0;
 	MAT(&filter,1,0) = -1.0;
 	MAT(&filter,1,1) = 5.0;
 	MAT(&filter,1,2) = -1.0;
@@ -68,12 +68,12 @@ int main(int argc, char* argv[])
 	MAT(&filter,2,1) = -1.0;
 	MAT(&filter,2,2) = 0.0;
 
-	applyFilter(&image,&filter,&filteredImage);
+	applyFilter(&image,&filter,&filteredImage,1);
 
 	return 0;
 }
 
-void applyFilter(struct matrix* image,struct matrix* filter,struct matrix* filteredImage){
+void applyFilter(struct matrix* image,struct matrix* filter,struct matrix* filteredImage,uint8 operation){
 
 	float tempResult ;
 	float tempPixelValue = 0.0;
@@ -83,7 +83,14 @@ void applyFilter(struct matrix* image,struct matrix* filter,struct matrix* filte
 				for (int l = 0; l < filter->numberOfRows; ++l) {
 					for (int m = 0; m < filter->numberOfColumns; ++m) {
 						tempPixelValue = getPixelValue(image,i,j,l-(filter->numberOfRows/2),m-(filter->numberOfColumns/2));
-						tempResult = tempResult + (tempPixelValue*MAT(filter,l,m));
+						if(operation == CONVOLUTION_OPERATION)
+						{
+							tempResult = tempResult + (tempPixelValue*MAT(filter,(filter->numberOfRows-1-l),(filter->numberOfColumns-1-m)));
+						}
+						else
+						{
+							tempResult = tempResult + (tempPixelValue*MAT(filter,l,m));
+						}
 					}
 				}
 				MAT(filteredImage,i,j) = tempResult;

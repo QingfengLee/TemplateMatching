@@ -17,6 +17,8 @@ typedef signed int sint32;
 typedef signed int sint16;
 
 #define TEMPLATEMATCHING_IMAGE_LENGTH (4000000)
+#define CONVOLUTION_OPERATION (0)
+#define CORRELATION_OPERATION (1)
 
 uint8 imageData[TEMPLATEMATCHING_IMAGE_LENGTH];
 
@@ -26,7 +28,7 @@ struct matrix{
 	float* values;
 };
 
-void applyFilter(struct matrix* image,struct matrix* filter,struct matrix* filteredImage);
+void applyFilter(struct matrix* image,struct matrix* filter,struct matrix* filteredImage,uint8 operation);
 
 float getPixelValue(struct matrix* image,uint32 imgPosX,uint32 imgPosY,uint32 filterPosX,uint32 filterPosY);
 
