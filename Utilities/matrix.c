@@ -7,6 +7,8 @@
 
 #include "matrix.h"
 
+// Initialises the given matrix with given number of rows,columns
+// And allocates memory for the size of the matrix
 void initMatrix(struct matrix* mat,uint32 numRows,uint32 numColumns)
 {
 	mat->numberOfRows = numRows;
@@ -15,6 +17,7 @@ void initMatrix(struct matrix* mat,uint32 numRows,uint32 numColumns)
 	mat->values = malloc(numRows*numColumns*sizeof(float));
 }
 
+// Destroys the matrix and free the allocated spaces
 void destroyMatrix(struct matrix* mat)
 {
 	mat->numberOfRows = 0;
@@ -23,6 +26,7 @@ void destroyMatrix(struct matrix* mat)
 	free(mat->values);
 }
 
+// Prints the matrix
 void printMatrix(struct matrix* mat)
 {
 	uint32 i;

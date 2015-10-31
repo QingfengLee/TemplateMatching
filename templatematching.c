@@ -39,16 +39,19 @@ int main(int argc, char* argv[])
 
 	}*/
 
+	// Declare matrices for image,filter and the output
 	struct matrix image;
 	struct matrix filter;
 	struct matrix filteredImage;
 
+	//Intialise matrices
 	initMatrix(&image,7,7);
 	initMatrix(&filter,5,5);
 	initMatrix(&filteredImage,7,7);
 
 	float value = 1.0;
 
+	// For testing purpose - Initialised a 7x7 matrix as image
 	for (uint8 i = 0; i < image.numberOfRows; ++i) {
 		for (uint8 j = 0; j < image.numberOfColumns; ++j) {
 			MAT(&image, i, j) = value;
@@ -60,6 +63,7 @@ int main(int argc, char* argv[])
 	printMatrix(&image);
 #endif
 
+	// For testing purpose - Initialised a 5x5 matrix as filter mask
 	MAT(&filter,0,0) = 1.0;
 	MAT(&filter,0,1) = -1.0;
 	MAT(&filter,0,2) = 3.0;
@@ -86,6 +90,10 @@ int main(int argc, char* argv[])
 	MAT(&filter,4,3) = 0.0;
 	MAT(&filter,4,4) = 0.0;
 
+	// Apply filter
+	// operation - Convolution/Correlation
+	// Mode - by which mode the values outside the array bound is computed
+	// Mode - Zero padding/Symmetric/Circular/Replicate
 	imfilter(&image,&filter,&filteredImage,CORRELATION_OPERATION,MODE_CIRCULAR);
 
 	return 0;

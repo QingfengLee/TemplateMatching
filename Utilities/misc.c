@@ -7,6 +7,7 @@
 
 #include "misc.h"
 
+// modulus calculation done for 2 given values
 uint32 mod (sint32 a, sint32 b)
 {
 	sint32 ret = 0;
