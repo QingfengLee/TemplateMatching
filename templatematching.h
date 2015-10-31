@@ -11,6 +11,7 @@
 #include "Utilities/misc.h"
 #include "Utilities/imfilter.h"
 #include "Utilities/matrix.h"
+#include "Utilities/RGBToGray.h"
 
 
 #define TEMPLATEMATCHING_IMAGE_LENGTH (4000000)

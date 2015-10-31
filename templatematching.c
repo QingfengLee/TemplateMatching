@@ -39,6 +39,16 @@ int main(int argc, char* argv[])
 
 	}*/
 
+	// For testing conversion of RGB to grayscale
+	uint8 imageBuf[12] = {255,255,255,
+						  255,255,0,
+						  255,0,255,
+						  0,255,255};
+
+	struct matrix* gray = convertRGBToGrayScale(imageBuf,12,2,2);
+
+	printMatrix(gray);
+
 	// Declare matrices for image,filter and the output
 	struct matrix* image;
 	struct matrix* filter;
