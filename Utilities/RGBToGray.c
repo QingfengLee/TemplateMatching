@@ -10,7 +10,7 @@
 // function to convert RGB to gray values
 struct matrix* convertRGBToGrayScale(uint8* rgb,uint32 rgbSize,uint32 width,uint32 height)
 {
-	struct matrix* grayScale = createMatrix(width,height);
+	struct matrix* grayScale = createMatrix(height,width);
 
 	float grayValue;
 	float red,green,blue;

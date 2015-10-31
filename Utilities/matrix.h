@@ -28,4 +28,6 @@ struct matrix* subtractMatrices(struct matrix* mat1,struct matrix* mat2);
 
 void initMatrix(struct matrix* mat, void* values);
 
+uint32 convertMatrixToBuffer(struct matrix* input, uint8* outputBuffer);
+
 #endif /* UTILITIES_MATRIX_H_ */
