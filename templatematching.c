@@ -40,61 +40,52 @@ int main(int argc, char* argv[])
 	}*/
 
 	// Declare matrices for image,filter and the output
-	struct matrix image;
-	struct matrix filter;
-	struct matrix filteredImage;
+	struct matrix* image;
+	struct matrix* filter;
+	struct matrix* filteredImage;
 
 	//Intialise matrices
-	initMatrix(&image,7,7);
-	initMatrix(&filter,5,5);
-	initMatrix(&filteredImage,7,7);
+	image = createMatrix(7,7);
+	filter = createMatrix(5,5);
 
 	float value = 1.0;
 
 	// For testing purpose - Initialised a 7x7 matrix as image
-	for (uint8 i = 0; i < image.numberOfRows; ++i) {
-		for (uint8 j = 0; j < image.numberOfColumns; ++j) {
-			MAT(&image, i, j) = value;
+	for (uint8 i = 0; i < image->numberOfRows; ++i) {
+		for (uint8 j = 0; j < image->numberOfColumns; ++j) {
+			MAT(image, i, j) = value;
 			value++;
 		}
 	}
 
 #ifdef DEBUG
-	printMatrix(&image);
+	printMatrix(image);
 #endif
 
 	// For testing purpose - Initialised a 5x5 matrix as filter mask
-	MAT(&filter,0,0) = 1.0;
-	MAT(&filter,0,1) = -1.0;
-	MAT(&filter,0,2) = 3.0;
-	MAT(&filter,0,3) = 3.0;
-	MAT(&filter,0,4) = 3.0;
-	MAT(&filter,1,0) = -1.0;
-	MAT(&filter,1,1) = 5.0;
-	MAT(&filter,1,2) = -1.0;
-	MAT(&filter,1,3) = -1.0;
-	MAT(&filter,1,4) = -1.0;
-	MAT(&filter,2,0) = 0.0;
-	MAT(&filter,2,1) = -1.0;
-	MAT(&filter,2,2) = 0.0;
-	MAT(&filter,2,3) = 0.0;
-	MAT(&filter,2,4) = 0.0;
-	MAT(&filter,3,0) = 0.0;
-	MAT(&filter,3,1) = -1.0;
-	MAT(&filter,3,2) = 0.0;
-	MAT(&filter,3,3) = 0.0;
-	MAT(&filter,3,4) = 0.0;
-	MAT(&filter,4,0) = 0.0;
-	MAT(&filter,4,1) = -1.0;
-	MAT(&filter,4,2) = 0.0;
-	MAT(&filter,4,3) = 0.0;
-	MAT(&filter,4,4) = 0.0;
+	float filterValues[5][5] = {{1.0, -1.0, 3.0, 3.0, 3.0},
+								{-1.0, 5.0, -1.0 , -1.0, -1.0},
+								{0.0,  -1.0 , 0.0 ,0.0 ,0.0 },
+								{0.0, -1.0, 0.0, 0.0, 0.0},
+								{0.0, -1.0,  0.0 , 0.0, 0.0}};
+
+	initMatrix(filter, (void*)filterValues);
 
 	// Apply filter
 	// operation - Convolution/Correlation
 	// Mode - by which mode the values outside the array bound is computed
 	// Mode - Zero padding/Symmetric/Circular/Replicate
-	imfilter(&image,&filter,&filteredImage,CORRELATION_OPERATION,MODE_CIRCULAR);
+	filteredImage = imfilter(image,filter,CORRELATION_OPERATION,MODE_CIRCULAR);
+
+	destroyMatrix(filteredImage);
+
+	filteredImage = imsharpen(image);
+
+	printMatrix(filteredImage);
+
+	destroyMatrix(image);
+	destroyMatrix(filter);
+	destroyMatrix(filteredImage);
 
 	return 0;
 }

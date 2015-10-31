@@ -9,12 +9,18 @@
 
 // Initialises the given matrix with given number of rows,columns
 // And allocates memory for the size of the matrix
-void initMatrix(struct matrix* mat,uint32 numRows,uint32 numColumns)
+struct matrix* createMatrix(uint32 numberOfRows,uint32 numberOfColumns)
 {
-	mat->numberOfRows = numRows;
-	mat->numberOfColumns = numColumns;
+	struct matrix* mat;
 
-	mat->values = malloc(numRows*numColumns*sizeof(float));
+	mat = malloc(sizeof(struct matrix));
+
+	mat->numberOfRows = numberOfRows;
+	mat->numberOfColumns = numberOfColumns;
+
+	mat->values = malloc(numberOfRows*numberOfColumns*sizeof(float));
+
+	return mat;
 }
 
 // Destroys the matrix and free the allocated spaces
@@ -24,6 +30,7 @@ void destroyMatrix(struct matrix* mat)
 	mat->numberOfColumns = 0;
 
 	free(mat->values);
+	free(mat);
 }
 
 // Prints the matrix
@@ -39,6 +46,33 @@ void printMatrix(struct matrix* mat)
 			printf("\n");
 	}
 
+}
+
+// utility for subtracting 2 matrices
+struct matrix* subtractMatrices(struct matrix* mat1,struct matrix* mat2)
+{
+	assert(mat1->numberOfRows  == mat2->numberOfRows);
+	assert(mat1->numberOfColumns  == mat2->numberOfColumns);
+
+	struct matrix* output = createMatrix(mat1->numberOfRows,mat1->numberOfColumns);
+
+	for (int i = 0; i < mat1->numberOfRows; ++i) {
+		for (int j = 0; j < mat1->numberOfColumns; ++j) {
+			MAT(output,i,j) = MAT(mat1,i,j) - MAT(mat2,i,j);
+		}
+
+	}
+
+	return output;
+}
+
+void initMatrix(struct matrix* mat, void* values)
+{
+	for (int i = 0; i < mat->numberOfRows; ++i) {
+			for (int j = 0; j < mat->numberOfColumns; ++j) {
+				MAT(mat,i,j) = ((float*)values)[j + (i * mat->numberOfColumns)];
+			}
+	}
 }
 
 

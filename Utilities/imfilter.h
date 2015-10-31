@@ -19,10 +19,10 @@
 #define MODE_REPLICATE (2)
 #define MODE_CIRCULAR (3)
 
-void imfilter(struct matrix* image,struct matrix* filter,struct matrix* filteredImage,uint8 operation,uint8 mode);
+struct matrix* imfilter(struct matrix* image,struct matrix* filter,uint8 operation,uint8 mode);
 
 float getPixelValue(struct matrix* image,uint32 imgPosX,uint32 imgPosY,uint32 filterPosX,uint32 filterPosY,uint8 mode);
 
-
+struct matrix* imsharpen(struct matrix* image);
 
 #endif /* UTILITIES_IMFILTER_H_ */

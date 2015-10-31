@@ -7,15 +7,20 @@
 
 #include "imfilter.h"
 
-void imfilter(struct matrix* image,struct matrix* filter,struct matrix* filteredImage,uint8 operation,uint8 mode){
+float laplacianFilter[3][3] = {{0.1667,0.6667,0.1667},
+							   {0.6667,-3.3333,0.6667},
+							   {0.1667,0.6667,0.1667}};
+
+struct matrix* imfilter(struct matrix* image,struct matrix* filter,uint8 operation,uint8 mode){
 
 	float tempResult ;
 	float tempPixelValue = 0.0;
+	struct matrix* filteredImage = createMatrix(image->numberOfRows,image->numberOfColumns);
+
 #ifdef DEBUG
 	//For debugging initialised a temporary matrix with boundary padded
 	// according to the mode given
-	struct matrix tempMatrix;
-	initMatrix(&tempMatrix,filter->numberOfRows,filter->numberOfColumns);
+	struct matrix* tempMatrix = createMatrix(filter->numberOfRows,filter->numberOfColumns);
 #endif
 	//Iterate the rows of the image
 	for (uint16 i = 0; i < image->numberOfRows; ++i) {
@@ -29,9 +34,9 @@ void imfilter(struct matrix* image,struct matrix* filter,struct matrix* filtered
 						// get the pixel value for the given filter mask position(l,m)
 						tempPixelValue = getPixelValue(image,i,j,l-(filter->numberOfRows/2),m-(filter->numberOfColumns/2),mode);
 #ifdef DEBUG
-						MAT(&tempMatrix,l,m) = tempPixelValue;
+						MAT(tempMatrix,l,m) = tempPixelValue;
 #endif
-						// fo convolutionoperation the filter should be inverted
+						// for convolution operation the filter should be inverted
 						if(operation == CONVOLUTION_OPERATION)
 						{
 							tempResult = tempResult + (tempPixelValue * MAT(filter,(filter->numberOfRows-1-l),(filter->numberOfColumns-1-m)));
@@ -44,14 +49,18 @@ void imfilter(struct matrix* image,struct matrix* filter,struct matrix* filtered
 					}
 				}
 #ifdef DEBUG
-				printMatrix(&tempMatrix);
+				printMatrix(tempMatrix);
 #endif
 				MAT(filteredImage,i,j) = tempResult;
 
 		}
 	}
 
+#ifdef DEBUG
 	printMatrix(filteredImage);
+#endif
+
+	return filteredImage;
 }
 
 
@@ -115,6 +124,25 @@ float getPixelValue(struct matrix* image,uint32 imgPosX,uint32 imgPosY,
 
 	return pixelValue;
 
+}
+
+// sharpening image - apply laplacian filter and
+//subtract the resultant image from the original image
+struct matrix* imsharpen(struct matrix* image)
+{
+	struct matrix* filter;
+	filter = createMatrix(3,3);
+
+	initMatrix(filter, (void*)laplacianFilter);
+
+	struct matrix* filteredImage = imfilter(image,filter,CORRELATION_OPERATION,MODE_PAD_ZERO);
+
+	struct matrix* sharpenedImage = subtractMatrices(image,filteredImage);
+
+	destroyMatrix(filter);
+	destroyMatrix(filteredImage);
+
+	return sharpenedImage;
 }
 
 

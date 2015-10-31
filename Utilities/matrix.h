@@ -18,13 +18,14 @@ struct matrix{
 	float* values;
 };
 
-
-void initMatrix(struct matrix* mat,uint32 numRows,uint32 numColumns);
+struct matrix* createMatrix(uint32 numberOfRows,uint32 numberOfColumns);
 
 void destroyMatrix(struct matrix* mat);
 
 void printMatrix(struct matrix* mat);
 
+struct matrix* subtractMatrices(struct matrix* mat1,struct matrix* mat2);
 
+void initMatrix(struct matrix* mat, void* values);
 
 #endif /* UTILITIES_MATRIX_H_ */

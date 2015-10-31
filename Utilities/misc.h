@@ -8,6 +8,9 @@
 #ifndef UTILITIES_MISC_H_
 #define UTILITIES_MISC_H_
 
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 typedef unsigned char uint8;
 typedef unsigned int uint32;
